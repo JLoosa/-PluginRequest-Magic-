@@ -1,0 +1,6 @@
+name: Magic
+version: 0.0.1
+main: me.jrl1004.plugins.magic.MagicPlugin
+
+author: Jacob Ryan
+authors: [Jacob Ryan, DarkBlade12]

@@ -1,0 +1,55 @@
+What I want: I'd like a plugin that gives players magic, based on the episodes once upon a time.
+When players press shift in slot 9, they will select the type, the name of it will be listed above the hotbar, and it will always go in a loop.
+
+
+
+These are the Abilities:
+
+- Smoking: press shift to teleport 15 blocks away into the direction you are looking.
+A smoke like particle will appear when you disappear and reappear, based on the colour they have in the permission (hex colour code).
+
+- Teleportation: left click to open a guy of listed players (their heads), and when you click their head, you will be teleported.
+if players have teleport.block the player cannot teleport, and a message will be sent saying ''that player is too powerful''
+
+- Fireball: launch a fireball when you left-click
+
+- Telekinesis: left click a block and then right click in a direction to throw it. also works on players.
+
+- Heart ripping: left click a player to rip out their heart. You will be given redstone dust, and when you right click with it the person loses half a heart.
+If the player had heart.block the player can not rip out the heart and a message sent ''that player is too powerful''
+
+- Healing: left click and the heart particle appears and heals you 3 hearts. heals everyone within a 3 block radius.
+
+- potioncraft: left click to get a GUI of all potions that you can get.
+
+
+
+Ideas for commands: No commands needed for this plugin.
+
+
+
+Ideas for permissions:
+
+- magic.smoking
+	- smoking.purple
+	- smoking.red
+	- smoking.green
+	- smoking.blue
+	- smoking.white
+
+- magic.teleport
+	- teleport.block
+
+- magic.fireball
+
+- magic.telekinesis
+
+- magic.heartripping
+	- heart.block
+
+- magic.healing
+
+- magic.potioncraft
+
+
+
