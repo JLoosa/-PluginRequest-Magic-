@@ -12,11 +12,11 @@ public class AbilityNothing extends AbstractAbility {
 
 	@Override
 	public void castSpell(Player player) {
-		if(!canUse(player)) {
+		if (!canUse(player)) {
 			ChatManager.messageBad(player, "You are somehow incapable of nothing... which is like being incapable of everything");
 			return;
 		}
-		player.sendMessage("Through the force of sheer willpower, you manage to do nothing at all.");
+		//player.sendMessage("Through the force of sheer willpower, you manage to do nothing at all.");
 	}
 
 }

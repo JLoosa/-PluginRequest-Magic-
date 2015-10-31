@@ -3,6 +3,7 @@ package me.jrl1004.plugins.magic.managers;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import me.jrl1004.plugins.magic.abilities.AbilityHealing;
 import me.jrl1004.plugins.magic.abilities.AbilityHeartripping;
 
 import org.bukkit.ChatColor;
@@ -37,9 +38,13 @@ public class HeartrippingManager implements Listener {
 		if (!(event.getEntity() instanceof Player && event.getDamager() instanceof Player)) return; // We only want to check this if players hit each other
 		final Player attacker = (Player) event.getDamager();
 		if (attacker.getInventory().getHeldItemSlot() != 8) return;
+		final Player victim = (Player) event.getEntity();
+		if (AbilityManager.getInstance().getCurrentSpell(attacker) instanceof AbilityHealing) {
+			event.setCancelled(true);
+			victim.setHealth(victim.getMaxHealth());
+		}
 		if (!(AbilityManager.getInstance().getCurrentSpell(attacker) instanceof AbilityHeartripping)) return; // Make sure the person punching has heartripping active
 		if (!AbilityManager.getInstance().getCurrentSpell(attacker).canUse(attacker)) return;
-		final Player victim = (Player) event.getEntity();
 		if (victim.hasPermission("heart.block")) {
 			ChatManager.messageBad(attacker, "That player is too powerful!");
 			ChatManager.messageGood(victim, attacker.getName() + " attempted to rip out your heart but was too weak!");
