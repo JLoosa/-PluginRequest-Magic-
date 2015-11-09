@@ -1,5 +1,7 @@
 package me.jrl1004.plugins.magic.abilities;
 
+import java.util.Random;
+
 import me.jrl1004.plugins.magic.managers.ChatManager;
 import me.jrl1004.plugins.magic.particles.ParticleEffect;
 
@@ -13,9 +15,12 @@ import org.bukkit.util.Vector;
 
 public class AbilitySmoking extends AbstractAbility {
 
+	private final Random random;
+
 	public AbilitySmoking() {
 		super("Smoking");
 		setPerm("magic.smoking");
+		random = new Random();
 	}
 
 	@Override
@@ -24,7 +29,7 @@ public class AbilitySmoking extends AbstractAbility {
 			ChatManager.messageBad(player, "You are not capable of performing this spell.");
 			return;
 		}
-		renderPlayerPartciles(player.getLocation());
+		renderPlayerPartciles(player.getLocation().add(.5, .75, .5));
 		Vector savedDirection = player.getLocation().getDirection();
 		BlockIterator bi = new BlockIterator(player, 15);
 		Block landingBlock = null;
@@ -35,7 +40,7 @@ public class AbilitySmoking extends AbstractAbility {
 				landingBlock = current;
 				break;
 			}
-			ParticleEffect.SMOKE_LARGE.display(savedDirection, 0.1f, current.getLocation().add(0.5, 0.5, 0.5), Bukkit.getOnlinePlayers());
+			//ParticleEffect.SMOKE_LARGE.display(savedDirection, 0.1f, current.getLocation().add(0.5, 0.5, 0.5), Bukkit.getOnlinePlayers());
 		}
 		if (landingBlock == null) {
 			landingBlock = player.getLocation().getBlock();
@@ -44,14 +49,18 @@ public class AbilitySmoking extends AbstractAbility {
 		landingLocation.setDirection(savedDirection);
 		player.teleport(landingLocation);
 		player.getLocation().setDirection(savedDirection);
-		renderPlayerPartciles(landingBlock.getLocation());
+		renderPlayerPartciles(landingBlock.getLocation().add(.5, 1.5, .5));
 		player.setFallDistance(0f); // Turn off teleport falling damage
 	}
 
 	private void renderPlayerPartciles(Location location) {
-		for (int i = 0; i < 125; i++) {
-			ParticleEffect.SMOKE_LARGE.display(Vector.getRandom(), 0.01f, location.clone().add(0.5, 1, 0.5), Bukkit.getOnlinePlayers());
+		for (int i = 0; i < 250; i++) {
+			ParticleEffect.SMOKE_LARGE.display(getTrueRandom().multiply(1.5), 0.01f, location.clone().add(getTrueRandom()), Bukkit.getOnlinePlayers());
 		}
 		location.getWorld().playSound(location, Sound.WITHER_SHOOT, 1, 1);
+	}
+
+	private Vector getTrueRandom() {
+		return new Vector((random.nextDouble() * 3) - 1, (random.nextDouble() * 3) - 1, (random.nextDouble() * 3) - 1);
 	}
 }

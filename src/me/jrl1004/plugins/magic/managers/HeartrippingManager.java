@@ -5,7 +5,9 @@ import java.util.HashMap;
 
 import me.jrl1004.plugins.magic.abilities.AbilityHealing;
 import me.jrl1004.plugins.magic.abilities.AbilityHeartripping;
+import me.jrl1004.plugins.magic.particles.ParticleEffect;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -16,6 +18,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.util.Vector;
 
 public class HeartrippingManager implements Listener {
 
@@ -42,6 +45,7 @@ public class HeartrippingManager implements Listener {
 		if (AbilityManager.getInstance().getCurrentSpell(attacker) instanceof AbilityHealing) {
 			event.setCancelled(true);
 			victim.setHealth(victim.getMaxHealth());
+			ParticleEffect.HEART.display(Vector.getRandom(), 1, victim.getEyeLocation().add(0, 0, .25), Bukkit.getOnlinePlayers());
 		}
 		if (!(AbilityManager.getInstance().getCurrentSpell(attacker) instanceof AbilityHeartripping)) return; // Make sure the person punching has heartripping active
 		if (!AbilityManager.getInstance().getCurrentSpell(attacker).canUse(attacker)) return;
