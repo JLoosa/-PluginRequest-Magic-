@@ -22,7 +22,7 @@ public class TeleportationManager implements Listener {
 	}
 
 	private void updateInventory() {
-		int newValue = toNextMod9(Math.max(Bukkit.getOnlinePlayers().length, 1));
+		int newValue = toNextMod9(Math.max(Bukkit.getOnlinePlayers().size(), 1));
 		if (lastPlayerCount == newValue) { return; }
 
 		if (teleportInventory != null) teleportInventory.clear();

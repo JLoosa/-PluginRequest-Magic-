@@ -57,7 +57,7 @@ public class AbilitySmoking extends AbstractAbility {
 		for (int i = 0; i < 250; i++) {
 			ParticleEffect.SMOKE_LARGE.display(getTrueRandom().multiply(1.5), 0.01f, location.clone().add(getTrueRandom()), Bukkit.getOnlinePlayers());
 		}
-		location.getWorld().playSound(location, Sound.WITHER_SHOOT, 1, 1);
+		location.getWorld().playSound(location, Sound.ENTITY_WITHER_SHOOT, 1, 1);
 	}
 
 	private Vector getTrueRandom() {

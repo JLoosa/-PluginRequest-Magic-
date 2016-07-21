@@ -4,6 +4,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -418,15 +419,15 @@ public enum ParticleEffect {
 	 */
 	MOB_APPEARANCE("mobappearance", 41, 8);
 
-	private static final int LONG_DISTANCE = 16;
-	private static final int LONG_DISTANCE_SQUARED = LONG_DISTANCE * LONG_DISTANCE;
-	private static final Map<String, ParticleEffect> NAME_MAP = new HashMap<String, ParticleEffect>();
-	private static final Map<Integer, ParticleEffect> ID_MAP = new HashMap<Integer, ParticleEffect>();
-	private final String name;
-	private final int id;
-	private final int requiredVersion;
-	private final boolean requiresData;
-	private final boolean requiresWater;
+	private static final int							LONG_DISTANCE			= 16;
+	private static final int							LONG_DISTANCE_SQUARED	= LONG_DISTANCE * LONG_DISTANCE;
+	private static final Map<String, ParticleEffect>	NAME_MAP				= new HashMap<String, ParticleEffect>();
+	private static final Map<Integer, ParticleEffect>	ID_MAP					= new HashMap<Integer, ParticleEffect>();
+	private final String								name;
+	private final int									id;
+	private final int									requiredVersion;
+	private final boolean								requiresData;
+	private final boolean								requiresWater;
 
 	// Initialize map for quick name and id lookup
 	static {
@@ -761,6 +762,10 @@ public enum ParticleEffect {
 		display(direction, speed, center, Arrays.asList(players));
 	}
 
+	public void display(Vector direction, float speed, Location center, Collection<? extends Player> players) throws ParticleVersionException, ParticleDataException, IllegalArgumentException {
+		display(direction, speed, center, Arrays.asList(players.toArray(new Player[players.size()])));
+	}
+
 	/**
 	 * Displays a particle effect which requires additional data and is only
 	 * visible for all players within a certain range in the world of @param
@@ -925,9 +930,9 @@ public enum ParticleEffect {
 	 */
 	public static abstract class ParticleData {
 
-		private final Material material;
-		private final byte data;
-		private final int[] packetData;
+		private final Material	material;
+		private final byte		data;
+		private final int[]		packetData;
 
 		/**
 		 * Construct a new particle data
@@ -1041,7 +1046,7 @@ public enum ParticleEffect {
 	 */
 	private static final class ParticleDataException extends RuntimeException {
 
-		private static final long serialVersionUID = 3203085387160737484L;
+		private static final long	serialVersionUID	= 3203085387160737484L;
 
 		/**
 		 * Construct a new particle data exception
@@ -1065,7 +1070,7 @@ public enum ParticleEffect {
 	 */
 	private static final class ParticleVersionException extends RuntimeException {
 
-		private static final long serialVersionUID = 3203085387160737484L;
+		private static final long	serialVersionUID	= 3203085387160737484L;
 
 		/**
 		 * Construct a new particle version exception
@@ -1089,23 +1094,23 @@ public enum ParticleEffect {
 	 */
 	public static final class ParticlePacket {
 
-		private static int version;
-		private static boolean isKcauldron;
-		private static Class<?> enumParticle;
-		private static Constructor<?> packetConstructor;
-		private static Method getHandle;
-		private static Field playerConnection;
-		private static Method sendPacket;
-		private static boolean initialized;
-		private final ParticleEffect effect;
-		private final float offsetX;
-		private final float offsetY;
-		private final float offsetZ;
-		private final float speed;
-		private final int amount;
-		private final boolean longDistance;
-		private final ParticleData data;
-		private Object packet;
+		private static int				version;
+		private static boolean			isKcauldron;
+		private static Class<?>			enumParticle;
+		private static Constructor<?>	packetConstructor;
+		private static Method			getHandle;
+		private static Field			playerConnection;
+		private static Method			sendPacket;
+		private static boolean			initialized;
+		private final ParticleEffect	effect;
+		private final float				offsetX;
+		private final float				offsetY;
+		private final float				offsetZ;
+		private final float				speed;
+		private final int				amount;
+		private final boolean			longDistance;
+		private final ParticleData		data;
+		private Object					packet;
 
 		/**
 		 * Construct a new particle packet
@@ -1356,7 +1361,7 @@ public enum ParticleEffect {
 		 */
 		private static final class VersionIncompatibleException extends RuntimeException {
 
-			private static final long serialVersionUID = 3203085387160737484L;
+			private static final long	serialVersionUID	= 3203085387160737484L;
 
 			/**
 			 * Construct a new version incompatible exception
@@ -1381,7 +1386,7 @@ public enum ParticleEffect {
 		 */
 		private static final class PacketInstantiationException extends RuntimeException {
 
-			private static final long serialVersionUID = 3203085387160737484L;
+			private static final long	serialVersionUID	= 3203085387160737484L;
 
 			/**
 			 * Construct a new packet instantiation exception
@@ -1405,7 +1410,7 @@ public enum ParticleEffect {
 		 */
 		private static final class PacketSendingException extends RuntimeException {
 
-			private static final long serialVersionUID = 3203085387160737484L;
+			private static final long	serialVersionUID	= 3203085387160737484L;
 
 			/**
 			 * Construct a new packet sending exception

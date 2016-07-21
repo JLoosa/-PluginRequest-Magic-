@@ -22,9 +22,9 @@ import org.bukkit.util.Vector;
 
 public class HeartrippingManager implements Listener {
 
-	private static HeartrippingManager manager;
-	private ItemStack defaultSpell = customStack(Material.BOOK, ChatColor.RED + "HeartRipping", ChatColor.GOLD + "Currently bound to:", "[Nobody]");
-	private HashMap<OfflinePlayer, OfflinePlayer> spellSelection;
+	private static HeartrippingManager				manager;
+	private ItemStack								defaultSpell	= customStack(Material.BOOK, ChatColor.RED + "HeartRipping", ChatColor.GOLD + "Currently bound to:", "[Nobody]");
+	private HashMap<OfflinePlayer, OfflinePlayer>	spellSelection;
 
 	private HeartrippingManager() {
 		spellSelection = new HashMap<OfflinePlayer, OfflinePlayer>();
@@ -59,7 +59,7 @@ public class HeartrippingManager implements Listener {
 			ChatManager.messageBad(victim, attacker.getName() + " has ripped your heart out of your body!");
 			spellSelection.put(attacker, victim);
 		}
-		attacker.setItemInHand(getValidBook(attacker));
+		attacker.getInventory().setItemInMainHand(getValidBook(attacker));
 	}
 
 	@EventHandler
@@ -87,11 +87,11 @@ public class HeartrippingManager implements Listener {
 	}
 
 	public void damageOther(Player player) {
-		player.setItemInHand(getValidBook(player));
+		player.getInventory().setItemInMainHand(getValidBook(player));
 		if (!spellSelection.containsKey(player)) return;
 		OfflinePlayer op = spellSelection.get(player);
 		if (!op.isOnline()) {
-			player.setItemInHand(getValidBook(player));
+			player.getInventory().setItemInMainHand(getValidBook(player));
 			return;
 		}
 		op.getPlayer().damage(1, player);

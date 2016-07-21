@@ -14,8 +14,8 @@ import org.bukkit.potion.PotionType;
 
 public class PotionCraftManager implements Listener {
 
-	private static PotionCraftManager manager;
-	private Inventory potionInventory;
+	private static PotionCraftManager	manager;
+	private Inventory					potionInventory;
 
 	private PotionCraftManager() {
 		updateInventory();
@@ -42,7 +42,6 @@ public class PotionCraftManager implements Listener {
 		return input;
 	}
 
-	// #StaticAbuse
 	public static PotionCraftManager getInstance() {
 		if (manager == null) manager = new PotionCraftManager();
 		return manager;
