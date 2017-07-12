@@ -3,14 +3,11 @@ package me.jrl1004.plugins.magic.managers;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import me.jrl1004.plugins.magic.abilities.AbilityHealing;
-import me.jrl1004.plugins.magic.abilities.AbilityHeartripping;
-import me.jrl1004.plugins.magic.particles.ParticleEffect;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -20,11 +17,16 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 
+import me.jrl1004.plugins.magic.abilities.AbilityHealing;
+import me.jrl1004.plugins.magic.abilities.AbilityHeartripping;
+import me.jrl1004.plugins.magic.particles.ParticleEffect;
+
 public class HeartrippingManager implements Listener {
 
-	private static HeartrippingManager				manager;
-	private ItemStack								defaultSpell	= customStack(Material.BOOK, ChatColor.RED + "HeartRipping", ChatColor.GOLD + "Currently bound to:", "[Nobody]");
-	private HashMap<OfflinePlayer, OfflinePlayer>	spellSelection;
+	private static HeartrippingManager manager;
+	private ItemStack defaultSpell = customStack(Material.BOOK, ChatColor.RED + "HeartRipping",
+			ChatColor.GOLD + "Currently bound to:", "[Nobody]");
+	private HashMap<OfflinePlayer, OfflinePlayer> spellSelection;
 
 	private HeartrippingManager() {
 		spellSelection = new HashMap<OfflinePlayer, OfflinePlayer>();
@@ -32,23 +34,29 @@ public class HeartrippingManager implements Listener {
 
 	// #StaticAbuse
 	public static HeartrippingManager getInstance() {
-		if (manager == null) manager = new HeartrippingManager();
+		if (manager == null)
+			manager = new HeartrippingManager();
 		return manager;
 	}
 
 	@EventHandler
 	public void onDamage(EntityDamageByEntityEvent event) {
-		if (!(event.getEntity() instanceof Player && event.getDamager() instanceof Player)) return; // We only want to check this if players hit each other
+		if (!(event.getEntity() instanceof Player && event.getDamager() instanceof Player))
+			return; // We only want to check this if players hit each other
 		final Player attacker = (Player) event.getDamager();
-		if (attacker.getInventory().getHeldItemSlot() != 8) return;
+		if (attacker.getInventory().getHeldItemSlot() != 8)
+			return;
 		final Player victim = (Player) event.getEntity();
 		if (AbilityManager.getInstance().getCurrentSpell(attacker) instanceof AbilityHealing) {
 			event.setCancelled(true);
-			victim.setHealth(victim.getMaxHealth());
-			ParticleEffect.HEART.display(Vector.getRandom(), 1, victim.getEyeLocation().add(0, 0, .25), Bukkit.getOnlinePlayers());
+			victim.setHealth(victim.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+			ParticleEffect.HEART.display(Vector.getRandom(), 1, victim.getEyeLocation().add(0, 0, .25),
+					Bukkit.getOnlinePlayers());
 		}
-		if (!(AbilityManager.getInstance().getCurrentSpell(attacker) instanceof AbilityHeartripping)) return; // Make sure the person punching has heartripping active
-		if (!AbilityManager.getInstance().getCurrentSpell(attacker).canUse(attacker)) return;
+		if (!(AbilityManager.getInstance().getCurrentSpell(attacker) instanceof AbilityHeartripping))
+			return; // Make sure the person punching has heartripping active
+		if (!AbilityManager.getInstance().getCurrentSpell(attacker).canUse(attacker))
+			return;
 		if (victim.hasPermission("heart.block")) {
 			ChatManager.messageBad(attacker, "That player is too powerful!");
 			ChatManager.messageGood(victim, attacker.getName() + " attempted to rip out your heart but was too weak!");
@@ -81,14 +89,16 @@ public class HeartrippingManager implements Listener {
 		ItemStack itemStack = new ItemStack(material);
 		ItemMeta itemMeta = itemStack.getItemMeta();
 		itemMeta.setDisplayName(name);
-		if (lore.length > 0) itemMeta.setLore(Arrays.asList(lore));
+		if (lore.length > 0)
+			itemMeta.setLore(Arrays.asList(lore));
 		itemStack.setItemMeta(itemMeta);
 		return itemStack;
 	}
 
 	public void damageOther(Player player) {
 		player.getInventory().setItemInMainHand(getValidBook(player));
-		if (!spellSelection.containsKey(player)) return;
+		if (!spellSelection.containsKey(player))
+			return;
 		OfflinePlayer op = spellSelection.get(player);
 		if (!op.isOnline()) {
 			player.getInventory().setItemInMainHand(getValidBook(player));
@@ -98,9 +108,12 @@ public class HeartrippingManager implements Listener {
 	}
 
 	private ItemStack getValidBook(Player player) {
-		if (!spellSelection.containsKey(player)) return defaultSpell.clone();
+		if (!spellSelection.containsKey(player))
+			return defaultSpell.clone();
 		OfflinePlayer op = spellSelection.get(player);
-		if (!op.isOnline()) return defaultSpell.clone();
-		return customStack(Material.REDSTONE, ChatColor.RED + "HeartRipping", ChatColor.GOLD + "Currently bound to:", spellSelection.get(player).getName());
+		if (!op.isOnline())
+			return defaultSpell.clone();
+		return customStack(Material.REDSTONE, ChatColor.RED + "HeartRipping", ChatColor.GOLD + "Currently bound to:",
+				spellSelection.get(player).getName());
 	}
 }

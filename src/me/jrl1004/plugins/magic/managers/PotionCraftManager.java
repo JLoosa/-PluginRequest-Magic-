@@ -9,41 +9,39 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.Potion;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionType;
 
 public class PotionCraftManager implements Listener {
 
-	private static PotionCraftManager	manager;
-	private Inventory					potionInventory;
+	private static PotionCraftManager manager;
+	private Inventory potionInventory;
 
 	private PotionCraftManager() {
 		updateInventory();
 	}
 
-	@SuppressWarnings("deprecation")
 	private void updateInventory() {
-		int newValue = toNextMod9((int) (4 * (PotionType.values().length - 1)));
-		if (potionInventory != null) potionInventory.clear();
-		potionInventory = Bukkit.createInventory(null, newValue, ChatColor.AQUA + "PotionCrafting");
-		for (PotionType pt : PotionType.values()) {
-			if (pt == PotionType.WATER || pt.toString().equalsIgnoreCase("WATER")) continue;
-			for (int b = 0; b < 2; b++)
-				for (int i = 0; i < 2; i++) {
-					Potion potion = new Potion(pt, i + 1, b == 1, true);
-					potionInventory.addItem(potion.toItemStack(1));
-				}
+		int inventorySize = PotionType.values().length;
+		inventorySize += 9 - (inventorySize % 9);
+		if (potionInventory != null)
+			potionInventory.clear();
+		potionInventory = Bukkit.createInventory(null, inventorySize, ChatColor.AQUA + "PotionCrafting");
+		for (PotionType potionType : PotionType.values()) {
+			ItemStack stack = new ItemStack(Material.POTION);
+			PotionMeta meta = (PotionMeta) stack.getItemMeta();
+			meta.clearCustomEffects();
+			PotionData data = new PotionData(potionType);
+			meta.setBasePotionData(data);
+			stack.setItemMeta(meta);
+			potionInventory.addItem(stack);
 		}
 	}
 
-	private int toNextMod9(int input) {
-		while (input % 9 != 0)
-			input++;
-		return input;
-	}
-
 	public static PotionCraftManager getInstance() {
-		if (manager == null) manager = new PotionCraftManager();
+		if (manager == null)
+			manager = new PotionCraftManager();
 		return manager;
 	}
 
@@ -54,10 +52,13 @@ public class PotionCraftManager implements Listener {
 
 	@EventHandler
 	public void onClick(InventoryClickEvent event) {
-		if (event.getInventory().hashCode() != potionInventory.hashCode()) return;
+		if (event.getInventory().hashCode() != potionInventory.hashCode())
+			return;
 		ItemStack clicked = event.getCurrentItem();
-		if (clicked == null || clicked.getType() != Material.POTION) clicked = event.getCursor();
-		if (clicked == null || clicked.getType() != Material.POTION) return;
+		if (clicked == null || clicked.getType() != Material.POTION)
+			clicked = event.getCursor();
+		if (clicked == null || clicked.getType() != Material.POTION)
+			return;
 		event.setCancelled(true);
 		event.getWhoClicked().getInventory().addItem(clicked.clone());
 	}
